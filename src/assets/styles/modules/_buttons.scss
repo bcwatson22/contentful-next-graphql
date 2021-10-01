@@ -1,0 +1,36 @@
+a,
+button {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  @include before();
+
+  &:before {
+    width: 100%;
+    height: 4.4rem;
+    left: 0;
+    @include central-y();
+  }
+
+  &[disabled],
+  &.disabled {
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.text-link,
+.widget-link {
+  @include weight-medium();
+}
+
+.text-link {
+  color: var(--blue);
+  @include link-underline('blue', 'blue-light', 'black');
+}
+
+.widget-link {
+  @include link-underline('blue-light', 'blue', 'white');
+}

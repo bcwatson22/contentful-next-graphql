@@ -2,11 +2,7 @@ import { withUrqlClient } from 'next-urql';
 import { Page } from '_molecules';
 import { contentfulSsr, contentfulUrl } from '_utils';
 
-interface IPage {
-  slug: string;
-}
-
-const pageQuery = `
+const query = `
   {
     pageCollection(where: { slug: "/" }, limit: 1) {
       items {
@@ -52,43 +48,18 @@ const pageQuery = `
   }
 `;
 
-const pathQuery = `
-  {
-    pageCollection {
-      items {
-        slug
-      }
-    }
-  }
-`;
-
-const About = () => (
-  <Page query={pageQuery}
-    title="about" />
+const AboutUs = () => (
+  <Page query={query}
+    title="about us" />
 );
-
-export const getStaticPaths = async () => {
-
-  const response = await contentfulSsr(pathQuery);
-  const extracted = response.extractData();
-  const key = Object.keys(extracted)[0];
-  const data = extracted[key].data;
-  const pages = typeof data === 'string' ? JSON.parse(data).pageCollection.items : [{ slug: 'placeholder' }];
-
-  return {
-    paths: pages.map((item: IPage) => ({ params: { route: item.slug } })),
-    fallback: false
-  };
-
-};
 
 export const getStaticProps = async () => {
 
-  const response = await contentfulSsr(pageQuery);
+  const serverResponse = await contentfulSsr(query);
 
   return {
     props: {
-      urqlState: response.extractData()
+      urqlState: serverResponse.extractData()
     },
     revalidate: 600
   };
@@ -100,4 +71,4 @@ export default withUrqlClient(
     url: contentfulUrl
   }),
   { ssr: false }
-)(About);
+)(AboutUs);

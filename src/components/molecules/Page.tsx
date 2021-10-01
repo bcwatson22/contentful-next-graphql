@@ -1,36 +1,16 @@
 import { useContext, useEffect } from 'react';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import useSWR from 'swr';
-import Favicon from './Favicon';
+import { useQuery } from 'urql';
 import Indicator from './Indicator';
-import Layout from './Layout';
 import Providers from './Providers';
-import { Hero } from '_organisms';
 import { LazyContext } from '_context';
-import { delay, fetcher, isLoading, lazyload } from '_utils';
+import { delay, isLoading, lazyload } from '_utils';
 import { useComponent } from '_hooks';
 
-interface IMeta {
-  title: string;
-  description: string;
-  keywords: string;
-}
-
-interface IPageData {
-  meta: IMeta;
-  components: IComponent[];
-}
-
-interface IPageResponse {
-  json: IPageData;
-  status: number;
-}
-
 export interface IProps {
-  endpoint: string;
-  response: IPageResponse;
-  host: string;
+  query: string;
+  title: string;
 }
 
 interface IMatched {
@@ -39,8 +19,9 @@ interface IMatched {
 
 const Component = ({ component }: IMatched) => {
 
-  const { id, content } = component;
+  const id = component.__typename.split('Organism')[1];
   const Component = useComponent(id);
+  const content = { ...component };
   
   return Component 
     ? <Component content={content} />
@@ -48,17 +29,13 @@ const Component = ({ component }: IMatched) => {
 
 };
 
-const Page = ({ response, endpoint, host }: IProps) => {
+const Page = ({ query, title }: IProps) => {
 
-  const { data } = useSWR(endpoint, fetcher, { initialData: response });
   const { asPath } = useRouter();
   const { refresh } = useContext(LazyContext);
-
-  const { meta, hero, components } = data?.json;
-  const { title, description, keywords, canonical, robots, sharing } = meta;
-  const { opengraph, twitter } = sharing;
-  const { url: ogUrl, title: ogTitle, description: ogDescription, image: ogImage } = opengraph;
-  const { title: twTitle, description: twDescription, image: twImage } = twitter;
+  const [{ fetching, data, error }] = useQuery({
+    query
+  });
 
   useEffect(() => {
 
@@ -82,67 +59,26 @@ const Page = ({ response, endpoint, host }: IProps) => {
 
   }, []);
 
+  if (fetching) return <h1>Fetching...</h1>;
+
+  if (error) return <h1>Error with query: {error.message}</h1>;
+
   return (
     <Indicator>
       <>
         <Head>
-          <title>{ title }</title>
-          <meta name="description" 
-            content={description} />
-          <meta name="keywords" 
-            content={keywords} />
-          <meta name="robots" 
-            content={robots} />
-          <Favicon />
-          <link rel="canonical" 
-            href={canonical} />
-          <link rel="alternate" 
-            href="https://prosperex.com.au/" 
-            hrefLang="x-default" />
-          {ogUrl && (
-            <meta property="og:url" 
-              content={ogUrl} />
-          )}
-          {ogTitle && (
-            <meta property="og:title" 
-              content={ogTitle} />
-          )}
-          {ogDescription && (
-            <meta property="og:description" 
-              content={ogDescription} />
-          )}
-          {ogImage && (
-            <meta property="og:image" 
-              content={ogImage} />
-          )}
-          {twTitle && (
-            <meta name="twitter:title" 
-              content={twTitle} />
-          )}
-          {twDescription && (
-            <meta name="twitter:description" 
-              content={twDescription} />
-          )}
-          {twImage && (
-            <meta name="twitter:image:src" 
-              content={twImage} />
-          )}
+          
         </Head>
         <Providers>
-          <Layout endpoint={endpoint}
-            host={host}>
-            {hero && <Hero />}
-            {components?.map((component: IComponent, i: number) => {
-
-              const { id } = component;
-
-              return (
-                <Component key={`${id}-${i}`} 
+          <div className="wrapper">
+            <main role="main">
+              <h1>Ey up { title }</h1>
+              {data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
+                <Component key={`${component.__typename}-${i}`} 
                   component={component} />
-              );
-
-            })}
-          </Layout>
+              ))}
+            </main>
+          </div>
         </Providers>
       </>
     </Indicator>

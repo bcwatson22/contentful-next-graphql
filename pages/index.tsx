@@ -1,9 +1,6 @@
-import { useQuery } from 'urql';
-import { useComponent } from '_hooks';
-
-interface IMatched {
-  component: IComponent;
-}
+import { withUrqlClient } from 'next-urql';
+import { Page } from '_molecules';
+import { contentfulSsr, contentfulUrl } from '_utils';
 
 const query = `
   {
@@ -51,44 +48,27 @@ const query = `
   }
 `;
 
-const Component = ({ component }: IMatched) => {
+const Home = () => (
+  <Page query={query}
+    title="home" />
+);
 
-  const id = component.__typename.split('Organism')[1];
-  const Component = useComponent(id);
-  const content = { ...component };
-  
-  return Component 
-    ? <Component content={content} />
-    : null;
+export const getStaticProps = async () => {
 
-};
+  const response = await contentfulSsr(query);
 
-const Home = () => {
-
-  const [{ fetching, data, error }] = useQuery({
-    query
-  });
-
-  if (fetching) return <h1>Fetching...</h1>;
-
-  if (error) return <h1>Error with query: {error.message}</h1>;
-
-  return (
-    <>
-      <h1>Ey up</h1>
-      {data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
-        <Component key={`${component.__typename}-${i}`} 
-          component={component} />
-      ))}
-    </>
-  );
+  return {
+    props: {
+      urqlState: response.extractData()
+    },
+    revalidate: 600
+  };
 
 };
 
-// export const getStaticProps = async () => {
-
-
-
-// };
-
-export default Home;
+export default withUrqlClient(
+  () => ({
+    url: contentfulUrl
+  }),
+  { ssr: false } // Important so we don't wrap our component in getInitialProps
+)(Home);

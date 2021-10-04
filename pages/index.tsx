@@ -1,6 +1,6 @@
 import { withUrqlClient } from 'next-urql';
 import { Page } from '_molecules';
-import { contentfulSsr, contentfulUrl } from '_utils';
+import { contentfulProps, contentfulUrl } from '_utils';
 
 const query = `
   {
@@ -53,18 +53,7 @@ const Home = () => (
     title="home" />
 );
 
-export const getStaticProps = async () => {
-
-  const response = await contentfulSsr(query);
-
-  return {
-    props: {
-      urqlState: response.extractData()
-    },
-    revalidate: 600
-  };
-
-};
+export const getStaticProps = async () => contentfulProps(query);
 
 export default withUrqlClient(
   () => ({

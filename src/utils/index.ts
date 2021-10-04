@@ -2,7 +2,8 @@ export { default as addTrailingSlash } from './addTrailingSlash';
 export { default as debounce } from './debounce';
 export { default as chunk } from './chunk';
 export { 
-  default as contentfulSsr, 
+  server as contentfulPaths,
+  extract as contentfulProps, 
   url as contentfulUrl 
 } from './contentfulSsr';
 export { default as delay } from './delay';

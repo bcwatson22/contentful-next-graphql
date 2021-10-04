@@ -1,6 +1,6 @@
 import { withUrqlClient } from 'next-urql';
 import { Page } from '_molecules';
-import { contentfulSsr, contentfulUrl } from '_utils';
+import { contentfulPaths, contentfulProps, contentfulUrl } from '_utils';
 
 interface IPage {
   slug: string;
@@ -69,11 +69,13 @@ const About = () => (
 
 export const getStaticPaths = async () => {
 
-  const response = await contentfulSsr(pathQuery);
+  const response = await contentfulPaths(pathQuery);
   const extracted = response.extractData();
   const key = Object.keys(extracted)[0];
   const data = extracted[key].data;
   const pages = typeof data === 'string' ? JSON.parse(data).pageCollection.items : [{ slug: 'placeholder' }];
+
+  console.log(pages);
 
   return {
     paths: pages.map((item: IPage) => ({ params: { route: item.slug } })),
@@ -82,18 +84,7 @@ export const getStaticPaths = async () => {
 
 };
 
-export const getStaticProps = async () => {
-
-  const response = await contentfulSsr(pageQuery);
-
-  return {
-    props: {
-      urqlState: response.extractData()
-    },
-    revalidate: 600
-  };
-
-};
+export const getStaticProps = async () => contentfulProps(pageQuery);
 
 export default withUrqlClient(
   () => ({

@@ -4,13 +4,14 @@ import Router, { useRouter } from 'next/router';
 import { useQuery } from 'urql';
 import Indicator from './Indicator';
 import Providers from './Providers';
+import { Primary } from '_navigation';
 import { LazyContext } from '_context';
 import { delay, isLoading, lazyload } from '_utils';
 import { useComponent } from '_hooks';
 
 export interface IProps {
   query: string;
-  title: string;
+  slug: string;
 }
 
 interface IMatched {
@@ -29,12 +30,13 @@ const Component = ({ component }: IMatched) => {
 
 };
 
-const Page = ({ query, title }: IProps) => {
+const Page = ({ query, slug }: IProps) => {
 
   const { asPath } = useRouter();
   const { refresh } = useContext(LazyContext);
   const [{ fetching, data, error }] = useQuery({
-    query
+    query,
+    variables: { slug }
   });
 
   useEffect(() => {
@@ -72,7 +74,8 @@ const Page = ({ query, title }: IProps) => {
         <Providers>
           <div className="wrapper">
             <main role="main">
-              <h1>Ey up { title }</h1>
+              <h1>Nah then { data.pageCollection.items[0].title } ({ data.pageCollection.items[0].slug })</h1>
+              <Primary links={data.navCollection.items} />
               {data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
                 <Component key={`${component.__typename}-${i}`} 
                   component={component} />

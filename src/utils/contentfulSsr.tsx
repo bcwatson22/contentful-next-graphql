@@ -1,18 +1,13 @@
 import { ssrExchange, dedupExchange, cacheExchange, fetchExchange } from 'urql';
 import { initUrqlClient } from 'next-urql';
 
-export const url = `https://graphql.contentful.com/content/v1/spaces/${process.env.NEXT_PUBLIC_CF_SPACE_ID}`;
+export const url = `https://graphql.contentful.com/content/v1/spaces/${process.env.NEXT_PUBLIC_CF_SPACE_ID}?access_token=${process.env.NEXT_PUBLIC_CF_CDA_TOKEN}`;
 
 export const server = async (query: string) => {
 
   const ssrCache = ssrExchange({ isClient: false });
   const client = initUrqlClient({
     url,
-    fetchOptions: {
-      headers: {
-        authorization: `Bearer ${process.env.NEXT_PUBLIC_CF_CDA_TOKEN}`
-      }
-    },
     exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
   }, false);
 

@@ -5,6 +5,5 @@ module.exports = withImages({
     domains: [
       'source.unsplash.com'
     ]
-  },
-  trailingSlash: true
+  }
 });

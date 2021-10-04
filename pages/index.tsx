@@ -3,8 +3,8 @@ import { Page } from '_molecules';
 import { contentfulProps, contentfulUrl } from '_utils';
 
 const query = `
-  {
-    pageCollection(where: { slug: "/" }, limit: 1) {
+  query ($slug: String) {
+    pageCollection(where: {slug: $slug}, limit: 1) {
       items {
         title
         slug
@@ -45,12 +45,18 @@ const query = `
         }
       }
     }
+    navCollection: pageCollection {
+      items {
+        title
+        slug
+      }
+    }
   }
 `;
 
 const Home = () => (
   <Page query={query}
-    title="home" />
+    slug="/" />
 );
 
 export const getStaticProps = async () => contentfulProps(query);

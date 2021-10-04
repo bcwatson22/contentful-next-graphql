@@ -1,0 +1,12 @@
+@import '_styles/mixins/layouts';
+
+.root {
+  ul {
+    @include flex();
+  }
+
+  li {
+    margin-right: 2rem;
+    color: var(--red);
+  }
+}

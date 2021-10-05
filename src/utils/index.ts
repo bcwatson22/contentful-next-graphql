@@ -4,7 +4,8 @@ export { default as chunk } from './chunk';
 export { 
   server as contentfulPaths,
   extract as contentfulProps, 
-  url as contentfulUrl 
+  previewUrl as contentfulPreview,
+  contentUrl as contentfulUrl 
 } from './contentfulSsr';
 export { default as delay } from './delay';
 export { default as fetcher } from './fetcher';
@@ -19,5 +20,6 @@ export { default as isLoading } from './isLoading';
 export { default as lazyload } from './lazyload';
 export { default as padNumber } from './padNumber';
 export { default as randomNumber } from './randomNumber';
-export { default as redirect } from './redirect';
+export { default as redirectClientSide } from './redirectClientSide';
+export { default as redirectServerSide } from './redirectServerSide';
 export { default as server } from './server';

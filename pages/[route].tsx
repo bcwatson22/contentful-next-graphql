@@ -80,22 +80,23 @@ const Route = () => {
 
 };
 
-export const getStaticPaths = async () => {
+export const getStaticPaths = async ({ preview = false }) => {
 
-  const response = await contentfulPaths(pathQuery);
+  const response = await contentfulPaths(pathQuery, preview);
   const extracted = response.extractData();
   const key = Object.keys(extracted)[0];
   const data = extracted[key].data;
-  const pages = typeof data === 'string' ? JSON.parse(data).pageCollection.items : [{ slug: 'placeholder' }];
+  const pages = typeof data === 'string' 
+    ? JSON.parse(data).pageCollection.items : [{ slug: 'placeholder' }];
 
   return {
     paths: pages.map((item: IPage) => ({ params: { route: item.slug } })),
-    fallback: false
+    fallback: true
   };
 
 };
 
-export const getStaticProps = async () => contentfulProps(pageQuery);
+export const getStaticProps = async ({ preview = false }) => contentfulProps(pageQuery, preview);
 
 export default withUrqlClient(
   () => ({

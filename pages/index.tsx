@@ -59,11 +59,21 @@ const Home = () => (
     slug="/" />
 );
 
-export const getStaticProps = async () => contentfulProps(query);
+const getUrl = (ctx: any, preview: any) => {
+
+  console.log('CTX INBOUND');
+  console.log(ctx);
+  console.log(`PREVIEW --- ${preview}`);
+
+  return contentfulUrl;
+
+};
+
+export const getStaticProps = async ({ preview = false }) => contentfulProps(query, preview);
 
 export default withUrqlClient(
-  () => ({
-    url: contentfulUrl
+  (ctx, preview) => ({
+    url: getUrl(ctx, preview)
   }),
-  { ssr: false } // Important so we don't wrap our component in getInitialProps
+  { ssr: false }
 )(Home);

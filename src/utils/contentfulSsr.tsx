@@ -1,38 +1,98 @@
-import { ssrExchange, dedupExchange, cacheExchange, fetchExchange } from 'urql';
-import { initUrqlClient } from 'next-urql';
+import { createClient } from 'urql';
 
-const base = `https://graphql.contentful.com/content/v1/spaces/${process.env.NEXT_PUBLIC_CF_SPACE_ID}?access_token=`;
+const endpointBase = `https://graphql.contentful.com/content/v1/spaces/${process.env.NEXT_PUBLIC_CF_SPACE_ID}?access_token=`;
 
-export const previewUrl = `${base}${process.env.NEXT_PUBLIC_CF_CPA_TOKEN}`;
+const previewUrl = `${endpointBase}${process.env.NEXT_PUBLIC_CF_CPA_TOKEN}`;
 
-export const contentUrl = `${base}${process.env.NEXT_PUBLIC_CF_CDA_TOKEN}`;
+const contentUrl = `${endpointBase}${process.env.NEXT_PUBLIC_CF_CDA_TOKEN}`;
 
-export const server = async (query: string, preview: boolean) => {
+export const clientContent = createClient({
+  url: contentUrl
+});
 
-  const ssrCache = ssrExchange({ isClient: false });
-  const client = initUrqlClient({
-    url: previewUrl,
-    exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
-  }, false);
+export const clientPreview = createClient({
+  url: previewUrl
+});
 
-  // This query is used to populate the cache for the query
-  // used on this page.
-  await client?.query(query).toPromise();
+export const contentQuery = `
+  query ($slug: String, $preview: Boolean=false) {
+    pageCollection(where: {slug: $slug}, limit: 1, preview: $preview) {
+      items {
+        title
+        slug
+        componentsCollection {
+          items {
+            __typename
+            ... on OrganismBanner {
+              heading
+              body {
+                json
+              }
+              button {
+                text
+                target {
+                  slug
+                }
+              }
+            }
+            ... on OrganismServices {
+              heading
+              intro {
+                json
+              }
+              servicesCollection(limit: 3) {
+                items {
+                  subheading
+                  description {
+                    json
+                  }
+                  image {
+                    url
+                    title
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    navCollection: pageCollection(preview: $preview) {
+      items {
+        title
+        slug
+      }
+    }
+  }
+`;
 
-  return ssrCache;
+export const contentServer = async ({ params, preview }: IPageContext) => {
+
+  const slug = params?.route ?? 'be reyt';
+
+  const queryVars = {
+    slug,
+    preview
+  };
+
+  const { data } = preview 
+    ? await clientPreview.query(contentQuery, queryVars).toPromise()
+    : await clientContent.query(contentQuery, queryVars).toPromise();
+
+  return data;
 
 };
 
-export const extract = async (query: string, preview: boolean) => {
+export const contentProps = async (ctx: IPageContext) => {
 
-  const response = await server(query, preview);
+  const data = await contentServer(ctx);
+  const preview = ctx.preview ?? false;
 
   return {
     props: {
-      urqlState: response.extractData(),
+      data,
       preview
-    },
-    revalidate: 600
+    }
   };
 
 };

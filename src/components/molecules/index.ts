@@ -6,7 +6,6 @@ export { default as Image } from './Image';
 export { default as Layout } from './Layout';
 export { default as Modal } from './Modal';
 export { default as Page } from './Page';
-export type { IProps as IPage } from './Page';
 export { default as Parallax } from './Parallax';
 export { default as Providers } from './Providers';
 export { default as Tabs } from './Tabs';

@@ -19,14 +19,18 @@ const Styleguide = () => {
         <title>Styleguide | Prosper Ex</title>
         {/*<link rel="icon" href="/favicon.ico" />*/}
       </Head>
-      <Providers>
-        <Layout>
-          <Hero />
-          <Colours />
-          <Fonts />
-          <Hierarchy />
-          <Breakpoints />
-        </Layout>
+      <Providers preview={false}>
+        {/* <Layout data={{}}
+          slug="styleguide"
+          preview={false}>
+          <>
+            <Hero />
+            <Colours />
+            <Fonts />
+            <Hierarchy />
+            <Breakpoints />
+          </>
+        </Layout> */}
       </Providers>
     </>
   );

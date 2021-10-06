@@ -41,19 +41,27 @@ interface IOptionCheckboxes extends IOption {
   choiceId?: string;
 }
 
-interface IPage {
-  preview: boolean;
+interface IPage extends IRoute {
+  data: any;
+  slug: string;
 }
 
 interface IPageContext {
-  req: any;
-  resolvedUrl: string;
-  res: { statusCode: number; redirect: (path: string) => void } | undefined;
+  params: IPageParam;
+  preview: boolean;
+}
+
+interface IPageParam {
+  route: string;
 }
 
 interface IQuery {
   device: 'mobile' | 'portrait' | 'landscape' | 'desktop';
   dimensions: IDimensions;
+}
+
+interface IRoute {
+  preview: boolean;
 }
 
 interface ITab {

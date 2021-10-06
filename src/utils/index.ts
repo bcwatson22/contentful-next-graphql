@@ -1,11 +1,12 @@
 export { default as addTrailingSlash } from './addTrailingSlash';
 export { default as debounce } from './debounce';
 export { default as chunk } from './chunk';
-export { 
-  server as contentfulPaths,
-  extract as contentfulProps, 
-  previewUrl as contentfulPreview,
-  contentUrl as contentfulUrl 
+export {
+  clientContent, 
+  clientPreview,
+  contentProps, 
+  contentServer,
+  contentQuery
 } from './contentfulSsr';
 export { default as delay } from './delay';
 export { default as fetcher } from './fetcher';

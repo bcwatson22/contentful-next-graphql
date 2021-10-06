@@ -1,4 +1,4 @@
-import styles from './Banner.module.scss';
+import styles from './Services.module.scss';
 
 interface IContent {
   heading: string;

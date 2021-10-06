@@ -1,10 +1,8 @@
-import hasSubRoute from './hasSubRoute';
-
 const getBaseRoute = (route: string): string => {
 
-  let baseRoute = route;
+  let baseRoute = route.split('/')[1];
 
-  if (hasSubRoute(route)) baseRoute = `/${route.split('/')[1]}`;
+  if (route === '/') baseRoute = '/';
 
   return baseRoute;
 

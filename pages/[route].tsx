@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
 import { withUrqlClient } from 'next-urql';
 import { Page } from '_molecules';
-import { contentfulPaths, contentfulProps, contentfulUrl } from '_utils';
+import { contentfulPaths, contentfulProps, contentfulUrl, getBaseRoute } from '_utils';
 
-interface IPage {
+interface IParam {
   slug: string;
 }
 
 const pageQuery = `
-  query ($slug: String) {
-    pageCollection(where: {slug: $slug}, limit: 1) {
+  query ($slug: String, $preview: Boolean=false) {
+    pageCollection(where: {slug: $slug}, limit: 1, preview: $preview) {
       items {
         title
         slug
@@ -50,7 +50,7 @@ const pageQuery = `
         }
       }
     }
-    navCollection: pageCollection {
+    navCollection: pageCollection(preview: $preview) {
       items {
         title
         slug
@@ -69,13 +69,14 @@ const pathQuery = `
   }
 `;
 
-const Route = () => {
+const Route = ({ preview }: IPage) => {
 
   const { asPath } = useRouter();
 
   return (
     <Page query={pageQuery}
-      slug={asPath.split('/')[1]} />
+      slug={getBaseRoute(asPath)}
+      preview={preview} />
   );
 
 };
@@ -90,7 +91,7 @@ export const getStaticPaths = async ({ preview = false }) => {
     ? JSON.parse(data).pageCollection.items : [{ slug: 'placeholder' }];
 
   return {
-    paths: pages.map((item: IPage) => ({ params: { route: item.slug } })),
+    paths: pages.map((item: IParam) => ({ params: { route: item.slug } })),
     fallback: true
   };
 

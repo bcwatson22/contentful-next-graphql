@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { getBaseRoute } from '_utils';
 import styles from './Primary.module.scss';
 
 interface INavLink {
@@ -10,24 +12,30 @@ interface IPrimary {
   links: INavLink[];
 }
 
-const Primary = ({ links }: IPrimary) => (
-  <nav className={styles.root}>
-    <ul>
-      {links.map(link => {
+const Primary = ({ links }: IPrimary) => {
 
-        const { title, slug } = link;
+  const { asPath } = useRouter();
 
-        return (
-          <li key={`${title}`}>
-            <Link href={slug}>
-              <a>{ title }</a>
-            </Link>
-          </li>
-        );
+  return (
+    <nav className={styles.root}>
+      <ul>
+        {links.map(link => {
 
-      })}
-    </ul>
-  </nav>
-);
+          const { title, slug } = link;
+
+          return (
+            <li key={`${title}`}>
+              <Link href={`${slug !== '/' ? '/' : ''}${slug}`}>
+                <a className={getBaseRoute(asPath) === slug ? styles.active : undefined}>{ title }</a>
+              </Link>
+            </li>
+          );
+
+        })}
+      </ul>
+    </nav>
+  );
+
+};
 
 export default Primary;

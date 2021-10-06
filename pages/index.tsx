@@ -1,10 +1,10 @@
 import { withUrqlClient } from 'next-urql';
 import { Page } from '_molecules';
-import { contentfulProps, contentfulUrl } from '_utils';
+import { contentfulProps, contentfulUrl, contentfulPreview } from '_utils';
 
 const query = `
-  query ($slug: String) {
-    pageCollection(where: {slug: $slug}, limit: 1) {
+  query ($slug: String, $preview: Boolean=false) {
+    pageCollection(where: {slug: $slug}, limit: 1, preview: $preview) {
       items {
         title
         slug
@@ -45,7 +45,7 @@ const query = `
         }
       }
     }
-    navCollection: pageCollection {
+    navCollection: pageCollection(preview: $preview) {
       items {
         title
         slug
@@ -54,26 +54,17 @@ const query = `
   }
 `;
 
-const Home = () => (
+const Home = ({ preview }: IPage) => (
   <Page query={query}
-    slug="/" />
+    slug="/"
+    preview={preview} />
 );
-
-const getUrl = (ctx: any, preview: any) => {
-
-  console.log('CTX INBOUND');
-  console.log(ctx);
-  console.log(`PREVIEW --- ${preview}`);
-
-  return contentfulUrl;
-
-};
 
 export const getStaticProps = async ({ preview = false }) => contentfulProps(query, preview);
 
 export default withUrqlClient(
-  (ctx, preview) => ({
-    url: getUrl(ctx, preview)
+  () => ({
+    url: contentfulPreview
   }),
   { ssr: false }
 )(Home);

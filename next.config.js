@@ -5,5 +5,14 @@ module.exports = withImages({
     domains: [
       'source.unsplash.com'
     ]
-  }
+  },
+  // i18n: {
+  //   locales: [
+  //     'en',
+  //     'es',
+  //     'catchAll'
+  //   ],
+  //   defaultLocale: 'catchAll'
+  // },
+  trailingSlash: true
 });

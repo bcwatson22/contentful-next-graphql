@@ -42,8 +42,7 @@ interface IOptionCheckboxes extends IOption {
 }
 
 interface IPage {
-  endpoint: string;
-  host: string;
+  preview: boolean;
 }
 
 interface IPageContext {

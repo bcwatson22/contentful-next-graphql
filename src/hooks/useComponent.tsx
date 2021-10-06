@@ -2,20 +2,17 @@ import { ComponentType } from 'react';
 import dynamic from 'next/dynamic';
 import {
   IBanner,
-  IServices,
-  IUspBar
+  IServices
 } from '_organisms';
 
 interface IDynamic {
   Banner: ComponentType<IBanner>;
   Services: ComponentType<IServices>;
-  UspBar: ComponentType<IUspBar>;
 }
 
 const dynamicComponents: IDynamic = {
   Banner: dynamic(() => import('_components/organisms/Banner')),
-  Services: dynamic(() => import('_components/organisms/Services')),
-  UspBar: dynamic(() => import('_components/organisms/UspBar'))
+  Services: dynamic(() => import('_components/organisms/Services'))
 };
 
 const useComponent = (id: string) => {

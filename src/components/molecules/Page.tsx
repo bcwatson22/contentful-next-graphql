@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { useQuery } from 'urql';
 import Indicator from './Indicator';
@@ -9,7 +10,7 @@ import { LazyContext } from '_context';
 import { delay, isLoading, lazyload } from '_utils';
 import { useComponent } from '_hooks';
 
-export interface IProps {
+export interface IProps extends IPage {
   query: string;
   slug: string;
 }
@@ -23,20 +24,23 @@ const Component = ({ component }: IMatched) => {
   const id = component.__typename.split('Organism')[1];
   const Component = useComponent(id);
   const content = { ...component };
-  
+
   return Component 
     ? <Component content={content} />
     : null;
 
 };
 
-const Page = ({ query, slug }: IProps) => {
+const Page = ({ query, slug, preview }: IProps) => {
 
-  const { asPath } = useRouter();
+  const { asPath, locale } = useRouter();
   const { refresh } = useContext(LazyContext);
   const [{ fetching, data, error }] = useQuery({
     query,
-    variables: { slug }
+    variables: { 
+      slug, 
+      preview
+    }
   });
 
   useEffect(() => {
@@ -75,6 +79,19 @@ const Page = ({ query, slug }: IProps) => {
           <div className="wrapper">
             <main role="main">
               <h1>Nah then { data.pageCollection.items[0].title } ({ data.pageCollection.items[0].slug })</h1>
+              {preview ? (
+                <div style={{ margin: '2rem 0' }}>
+                  You're in preview mode!
+                  <Link href="/api/preview-exit">
+                    <a style={{ textDecoration: 'underline', marginLeft: 5 }}>Exit</a>
+                  </Link>
+                </div>
+              ) : (
+                // <Link href={`/api/preview?slug=/${locale}${asPath}`}>
+                <Link href={`/api/preview?slug=${asPath}`}>
+                  <a style={{ textDecoration: 'underline' }}>Enter preview</a>
+                </Link>
+              )}
               <Primary links={data.navCollection.items} />
               {data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
                 <Component key={`${component.__typename}-${i}`} 

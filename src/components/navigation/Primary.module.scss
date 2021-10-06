@@ -7,6 +7,10 @@
 
   li {
     margin-right: 2rem;
-    color: var(--red);
+    color: var(--blue);
   }
+}
+
+.active {
+  font-weight: var(--semibold);
 }

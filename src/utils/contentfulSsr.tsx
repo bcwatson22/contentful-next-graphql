@@ -1,4 +1,3 @@
-import { NextPageContext } from 'next';
 import { ssrExchange, dedupExchange, cacheExchange, fetchExchange } from 'urql';
 import { initUrqlClient } from 'next-urql';
 
@@ -12,7 +11,7 @@ export const server = async (query: string, preview: boolean) => {
 
   const ssrCache = ssrExchange({ isClient: false });
   const client = initUrqlClient({
-    url: preview ? previewUrl : contentUrl,
+    url: previewUrl,
     exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
   }, false);
 

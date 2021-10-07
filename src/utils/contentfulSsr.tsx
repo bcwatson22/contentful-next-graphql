@@ -68,7 +68,7 @@ export const contentQuery = `
 
 export const contentServer = async ({ params, preview }: IPageContext) => {
 
-  const slug = params?.route ?? 'be reyt';
+  const slug = params?.slug ?? 'be reyt';
 
   const queryVars = {
     slug,

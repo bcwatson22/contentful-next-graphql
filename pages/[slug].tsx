@@ -23,9 +23,9 @@ export const getStaticPaths = async (ctx: IPageContext) => {
   const data = await contentServer(ctx);
 
   return {
-    paths: data.navCollection.items.filter((item: IParam) => item.slug !== '/').map((item: IParam) => ({ 
+    paths: data.navCollection.items.filter(({ slug }: IParam) => slug !== '/').map(({ slug }: IParam) => ({ 
       params: { 
-        route: item.slug 
+        slug 
       } 
     })),
     fallback: true

@@ -48,7 +48,7 @@ const Layout = ({ data, slug, preview, children }: IProps) => {
           </Link>
         )}
         <Primary links={data.navCollection.items} />
-        {data.pageCollection.items[0].componentsCollection.items && data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
+        {data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
           <Component key={`${component?.__typename}-${i}`} 
             component={component} />
         ))}

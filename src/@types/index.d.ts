@@ -52,7 +52,7 @@ interface IPageContext {
 }
 
 interface IPageParam {
-  route: string;
+  slug: string;
 }
 
 interface IQuery {

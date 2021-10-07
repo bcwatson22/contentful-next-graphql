@@ -1,9 +1,8 @@
-import { Page } from '_molecules';
+import { Page } from '_organisms';
 import { contentProps } from '_utils';
 
 const Home = ({ data, preview }: IPage) => (
   <Page data={data}
-    slug="/"
     preview={preview} />
 );
 

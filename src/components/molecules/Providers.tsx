@@ -3,7 +3,7 @@ import { Provider as QueryProvider } from 'urql';
 import { LazyProvider, ModalProvider, NavProvider } from '_context';
 import { clientContent, clientPreview } from '_utils';
 
-interface IProps extends IRoute {
+interface IProps extends IPreview {
 	children: ReactNode;
 }
 

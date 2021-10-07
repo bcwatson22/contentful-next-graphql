@@ -1,13 +1,11 @@
 import { useContext, useEffect } from 'react';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import Indicator from './Indicator';
-import Layout from './Layout';
-import Providers from './Providers';
+import { Favicon, Indicator, Layout, Preview, Providers } from '_molecules';
 import { LazyContext } from '_context';
 import { delay, isLoading, lazyload } from '_utils';
 
-const Page = ({ data, slug, preview }: IPage) => {
+const Page = ({ data, preview }: IPage) => {
 
   const { asPath } = useRouter();
   const { refresh } = useContext(LazyContext);
@@ -38,11 +36,12 @@ const Page = ({ data, slug, preview }: IPage) => {
     <Indicator>
       <>
         <Head>
-          
+          <title>Contentful PoC</title>
+          <Favicon />
         </Head>
         <Providers preview={preview}>
+          <Preview preview={preview} />
           <Layout data={data}
-            slug={slug}
             preview={preview} />
         </Providers>
       </>

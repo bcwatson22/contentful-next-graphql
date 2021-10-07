@@ -41,9 +41,8 @@ interface IOptionCheckboxes extends IOption {
   choiceId?: string;
 }
 
-interface IPage extends IRoute {
+interface IPage extends IPreview {
   data: any;
-  slug: string;
 }
 
 interface IPageContext {
@@ -60,7 +59,7 @@ interface IQuery {
   dimensions: IDimensions;
 }
 
-interface IRoute {
+interface IPreview {
   preview: boolean;
 }
 

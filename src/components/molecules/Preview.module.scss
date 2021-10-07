@@ -1,0 +1,14 @@
+.root {
+  position: fixed;
+  bottom: var(--margin);
+  right: var(--margin);
+  padding: var(--margin);
+  background: var(--black);
+  color: var(--white);
+  z-index: 10;
+
+  a {
+    margin-left: 0.5rem;
+    text-decoration: underline;
+  }
+}

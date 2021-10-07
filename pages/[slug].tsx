@@ -1,22 +1,14 @@
-import { useRouter } from 'next/router';
-import { Page } from '_molecules';
-import { contentProps, contentServer, getBaseRoute } from '_utils';
+import { Page } from '_organisms';
+import { contentProps, contentServer } from '_utils';
 
 interface IParam {
   slug: string;
 }
 
-const Route = ({ data, preview }: IPage) => {
-
-  const { asPath } = useRouter();
-
-  return (
-    <Page data={data}
-      slug={getBaseRoute(asPath)}
-      preview={preview} />
-  );
-
-};
+const Route = ({ data, preview }: IPage) => (
+  <Page data={data}
+    preview={preview} />
+);
 
 export const getStaticPaths = async (ctx: IPageContext) => {
 

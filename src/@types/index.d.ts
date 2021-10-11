@@ -27,8 +27,8 @@ interface IImage {
 }
 
 interface ILink {
-  target: string;
-  text: string;
+  title: string;
+  slug: string;
 }
 
 interface IOption {

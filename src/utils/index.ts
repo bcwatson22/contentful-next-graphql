@@ -5,8 +5,8 @@ export {
   clientContent, 
   clientPreview,
   contentProps, 
-  contentServer,
-  contentQuery
+  contentServer, 
+  contentSitemap
 } from './contentfulSsr';
 export { default as delay } from './delay';
 export { default as fetcher } from './fetcher';

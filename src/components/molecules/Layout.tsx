@@ -8,9 +8,9 @@ const Layout = ({ data }: IPage) => {
   return (
     <div className="wrapper">
       <main role="main">
-        <h1>Nah then { data.pageCollection.items[0].title } ({ data.pageCollection.items[0].slug })</h1>
-        <Primary links={data.navCollection.items} />
-        {data.pageCollection.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
+        <h1>Nah then { data.currentPage.items[0].title } ({ data.currentPage.items[0].slug })</h1>
+        <Primary links={data.headerNav.linksCollection.items} />
+        {data.currentPage.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
           <Component key={`${component?.__typename}-${i}`} 
             component={component} />
         ))}

@@ -14,9 +14,9 @@ export const clientPreview = createClient({
   url: previewUrl
 });
 
-export const contentQuery = `
+const contentQuery = `
   query ($slug: String, $preview: Boolean=false) {
-    pageCollection(where: {slug: $slug}, limit: 1, preview: $preview) {
+    currentPage: pageCollection(where: {slug: $slug}, limit: 1, preview: $preview) {
       items {
         title
         slug
@@ -57,10 +57,33 @@ export const contentQuery = `
         }
       }
     }
-    navCollection: pageCollection(preview: $preview) {
+    headerNav: navigation(id: "4PCsX1jFNXIXv0sB68cJuN", preview: $preview) {
+      linksCollection {
+        items {
+          title
+          slug 
+          childPagesCollection {
+            items {
+              title
+              slug
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const sitemapQuery = `
+  {
+    pageCollection {
       items {
-        title
         slug
+        childPagesCollection {
+          items {
+            slug
+          }
+        }
       }
     }
   }
@@ -83,10 +106,24 @@ export const contentServer = async ({ params, preview }: IPageContext) => {
 
 };
 
+export const contentSitemap = async () => {
+
+  const { data } = await clientContent.query(sitemapQuery).toPromise();
+
+  // console.log(`DATA INBOUND`);
+  // console.log(JSON.stringify(data));
+
+  return data;
+
+};
+
 export const contentProps = async (ctx: IPageContext) => {
 
   const data = await contentServer(ctx);
   const preview = ctx.preview ?? false;
+
+  // console.log(`CTX INBOUND`);
+  // console.log(ctx);
 
   return {
     props: {

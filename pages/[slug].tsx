@@ -1,25 +1,23 @@
 import { Page } from '_organisms';
-import { contentProps, contentServer } from '_utils';
+import { contentProps, contentSitemap } from '_utils';
 
-interface IParam {
-  slug: string;
-}
-
-const Route = ({ data, preview }: IPage) => (
+const Slug = ({ data, preview }: IPage) => (
   <Page data={data}
     preview={preview} />
 );
 
-export const getStaticPaths = async (ctx: IPageContext) => {
+export const getStaticPaths = async () => {
 
-  const data = await contentServer(ctx);
+  const data = await contentSitemap();
 
   return {
-    paths: data.navCollection.items.filter(({ slug }: IParam) => slug !== '/').map(({ slug }: IParam) => ({ 
-      params: { 
-        slug 
-      } 
-    })),
+    paths: data.pageCollection.items
+      .filter(({ slug }: IPageParam) => slug !== '/')
+      .map(({ slug }: IPageParam) => ({ 
+        params: { 
+          slug
+        } 
+      })),
     fallback: true
   };
 
@@ -27,4 +25,4 @@ export const getStaticPaths = async (ctx: IPageContext) => {
 
 export const getStaticProps = async (ctx: IPageContext) => contentProps(ctx);
 
-export default Route;
+export default Slug;

@@ -1,12 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { redirectServerSide } from '_utils';
 
-const handlePreviewExit = (_: NextApiRequest, res: NextApiResponse) => {
+const handlePreviewExit = (req: NextApiRequest, res: NextApiResponse) => {
 
-  // Clears the preview mode cookies.
   res.clearPreviewData();
 
-  redirectServerSide(res, '/', 307);
+  const { slug } = req.query;
+
+  typeof slug === 'string'
+    ? redirectServerSide(res, slug, 307)
+    : redirectServerSide(res, '/', 307);
   
   res.end();
 

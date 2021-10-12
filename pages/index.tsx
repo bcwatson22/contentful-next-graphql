@@ -6,6 +6,6 @@ const Home = ({ data, preview }: IPage) => (
     preview={preview} />
 );
 
-export const getStaticProps = async ({ preview = false }) => contentProps({ params: { slug: '/' }, preview });
+export const getStaticProps = async ({ preview = false }) => contentProps({ locale: 'en', locales: ['en', 'es'], params: { slug: '/' }, preview });
 
 export default Home;

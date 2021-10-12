@@ -6,13 +6,13 @@ module.exports = withImages({
       'source.unsplash.com'
     ]
   },
-  // i18n: {
-  //   locales: [
-  //     'en',
-  //     'es',
-  //     'catchAll'
-  //   ],
-  //   defaultLocale: 'catchAll'
-  // },
+  i18n: {
+    locales: [
+      'en',
+      'es',
+      'catchAll'
+    ],
+    defaultLocale: 'catchAll'
+  },
   trailingSlash: true
 });

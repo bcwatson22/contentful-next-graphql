@@ -46,6 +46,8 @@ interface IPage extends IPreview {
 }
 
 interface IPageContext {
+  locale: string;
+  locales: string[];
   params: IPageParam;
   preview: boolean;
 }

@@ -7,7 +7,7 @@ const handlePreview = (req: NextApiRequest, res: NextApiResponse) => {
 
   const { slug } = req.query;
 
-  if (!req.query.slug) return res.status(401).json({ message: 'Invalid slug' });
+  if (!slug) return res.status(401).json({ message: 'Invalid slug' });
 
   if (typeof slug === 'string') {
 

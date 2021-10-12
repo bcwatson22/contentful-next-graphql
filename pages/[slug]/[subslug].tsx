@@ -1,5 +1,5 @@
 import { Page } from '_organisms';
-import { contentProps, contentSitemap } from '_utils';
+import { contentProps, contentSitemap, filterLocales } from '_utils';
 
 interface IChildPages {
   items: IPageParam[];
@@ -14,20 +14,29 @@ const SubSlug = ({ data, preview }: IPage) => (
     preview={preview} />
 );
 
-export const getStaticPaths = async () => {
+export const getStaticPaths = async ({ locales }: IPageContext) => {
 
   const data = await contentSitemap();
+  const filteredPages = data.pageCollection.items.filter(({ childPagesCollection }: IParentParam) => childPagesCollection.items.length > 0);
+  const filteredLocales = filterLocales(locales);
 
   return {
-    paths: data.pageCollection.items
-      .filter(({ childPagesCollection }: IParentParam) => childPagesCollection.items.length > 0)
-      .map(({ slug, childPagesCollection }: IParentParam) => childPagesCollection.items.map(({ slug: subslug }: IPageParam) => ({
-        params: {
-          slug,
-          subslug
-        }
-      }))[0]),
-    fallback: true
+    paths: 
+      filteredLocales
+        .map(locale => filteredPages
+          .map(({ slug, childPagesCollection }: IParentParam) => childPagesCollection.items
+            .map(({ slug: subslug }: IPageParam) => ({
+              params: {
+                slug,
+                subslug
+              },
+              locale
+            }))
+          )
+        )
+        .flat(2)
+    ,
+    fallback: false
   };
 
 };

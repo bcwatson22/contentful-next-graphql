@@ -10,6 +10,7 @@ export {
 } from './contentfulSsr';
 export { default as delay } from './delay';
 export { default as fetcher } from './fetcher';
+export { default as filterLocales } from './filterLocales';
 export { default as getBaseRoute } from './getBaseRoute';
 export { default as getRequestHeaders } from './getRequestHeaders';
 export { default as getRoute } from './getRoute';

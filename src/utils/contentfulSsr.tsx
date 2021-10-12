@@ -117,12 +117,28 @@ export const contentSitemap = async () => {
 export const contentProps = async (ctx: IPageContext) => {
 
   const data = await contentServer(ctx);
-  const preview = ctx.preview ?? false;
+  const { locale, params, preview = false } = ctx;
+  const { slug, subslug } = params;
+
+  if (locale === 'catchAll') {
+
+    return {
+      redirect: {
+        destination: `/en/${slug}${subslug ? '/' + subslug : ''}`,
+        locale: false,
+        permanent: true
+      }
+    };
+
+  }
+
+  // console.log(`CTX INBOUND`);
+  // console.log(ctx);
 
   return {
     props: {
       data,
-      preview
+      preview: preview
     }
   };
 

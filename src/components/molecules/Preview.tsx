@@ -5,21 +5,21 @@ import styles from './Preview.module.scss';
 const Preview = ({ preview }: IPreview) => {
 
   const { asPath, locale } = useRouter();
+  const query = `?slug=/${locale ?? 'en'}${asPath}`;
 
   return (
     <aside className={styles.root}>
       {preview ? (
         <>
           You're in preview mode!
-          <Link href="/api/preview-exit">
+          <Link href={`/api/preview-exit${query}`}>
             <a>Exit</a>
           </Link>
         </>
       ) : (
         <>
-          {/* <Link href={`/api/preview?slug=/${locale}${asPath}`}> */}
           Published content
-          <Link href={`/api/preview?slug=${asPath}`}>
+          <Link href={`/api/preview${query}`}>
             <a>Enter preview</a>
           </Link>
         </>

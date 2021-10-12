@@ -91,7 +91,7 @@ const sitemapQuery = `
 
 export const contentServer = async ({ params, preview }: IPageContext) => {
 
-  const slug = params?.slug ?? 'be reyt';
+  const slug = params?.subslug ?? params?.slug ?? 'be reyt';
 
   const queryVars = {
     slug,
@@ -110,9 +110,6 @@ export const contentSitemap = async () => {
 
   const { data } = await clientContent.query(sitemapQuery).toPromise();
 
-  // console.log(`DATA INBOUND`);
-  // console.log(JSON.stringify(data));
-
   return data;
 
 };
@@ -121,9 +118,6 @@ export const contentProps = async (ctx: IPageContext) => {
 
   const data = await contentServer(ctx);
   const preview = ctx.preview ?? false;
-
-  // console.log(`CTX INBOUND`);
-  // console.log(ctx);
 
   return {
     props: {

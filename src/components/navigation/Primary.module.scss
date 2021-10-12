@@ -1,13 +1,35 @@
 @import '_styles/mixins/layouts';
+@import '_styles/mixins/interaction';
 
 .root {
+  margin: 2rem 0;
+
   ul {
     @include flex();
+    align-items: flex-start;
   }
 
   li {
     margin-right: 2rem;
     color: var(--blue);
+
+    ul {
+      flex-direction: column;
+
+      li {
+        margin: 0;
+      }
+    }
+  }
+
+  a {
+    padding: 1rem 0;
+    display: block;
+    @include text-hover-none();
+
+    &:before {
+      content: none;
+    }
   }
 }
 

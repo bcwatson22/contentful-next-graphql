@@ -52,6 +52,7 @@ interface IPageContext {
 
 interface IPageParam {
   slug: string;
+  subslug?: string;
 }
 
 interface IQuery {

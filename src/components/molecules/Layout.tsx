@@ -1,5 +1,5 @@
 import Component from './Component';
-import { Primary } from '_navigation';
+import { Locales, Primary } from '_navigation';
 
 const Layout = ({ data }: IPage) => {
 
@@ -8,7 +8,8 @@ const Layout = ({ data }: IPage) => {
   return (
     <div className="wrapper">
       <main role="main">
-        <h1>Nah then { data.currentPage.items[0].title } ({ data.currentPage.items[0].slug })</h1>
+        <h1>{ data.currentPage.items[0].title }</h1>
+        <Locales />
         <Primary links={data.headerNav.linksCollection.items} />
         {data.currentPage.items[0].componentsCollection.items.map((component: IComponent, i: number) => (
           <Component key={`${component?.__typename}-${i}`} 

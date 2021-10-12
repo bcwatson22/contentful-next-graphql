@@ -1,14 +1,6 @@
 import { Page } from '_organisms';
 import { contentProps, contentSitemap, filterLocales } from '_utils';
 
-interface IChildPages {
-  items: IPageParam[];
-}
-
-interface IParentParam extends IPageParam {
-  childPagesCollection: IChildPages;
-}
-
 const SubSlug = ({ data, preview }: IPage) => (
   <Page data={data}
     preview={preview} />
@@ -16,8 +8,8 @@ const SubSlug = ({ data, preview }: IPage) => (
 
 export const getStaticPaths = async ({ locales }: IPageContext) => {
 
-  const data = await contentSitemap();
-  const filteredPages = data.pageCollection.items.filter(({ childPagesCollection }: IParentParam) => childPagesCollection.items.length > 0);
+  const { pageCollection } = await contentSitemap();
+  const filteredPages = pageCollection.items.filter(({ childPagesCollection }: IParentParam) => childPagesCollection.items.length > 0);
   const filteredLocales = filterLocales(locales);
 
   return {

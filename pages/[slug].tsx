@@ -8,8 +8,10 @@ const Slug = ({ data, preview }: IPage) => (
 
 export const getStaticPaths = async ({ locales }: IPageContext) => {
 
-  const data = await contentSitemap();
-  const filteredPages = data.pageCollection.items.filter(({ slug }: IPageParam) => slug !== '/');
+  const { pageCollection } = await contentSitemap();
+  const { items: pages } = pageCollection;
+  const subpages = pages.map(({ childPagesCollection }: IParentParam) => childPagesCollection.items.map(({ slug }: IPageParam) => slug)).flat();
+  const filteredPages = pages.filter(({ slug }: IPageParam) => (slug !== '/' && !subpages.includes(slug)));
   const filteredLocales = filterLocales(locales);
 
   return {

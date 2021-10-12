@@ -15,8 +15,8 @@ export const clientPreview = createClient({
 });
 
 const contentQuery = `
-  query ($slug: String, $preview: Boolean=false) {
-    currentPage: pageCollection(where: {slug: $slug}, limit: 1, preview: $preview) {
+  query ($slug: String, $locale: String="en", $preview: Boolean=false) {
+    currentPage: pageCollection(where: {slug: $slug}, limit: 1, locale: $locale, preview: $preview) {
       items {
         title
         slug
@@ -57,7 +57,7 @@ const contentQuery = `
         }
       }
     }
-    headerNav: navigation(id: "4PCsX1jFNXIXv0sB68cJuN", preview: $preview) {
+    headerNav: navigation(id: "4PCsX1jFNXIXv0sB68cJuN", locale: $locale, preview: $preview) {
       linksCollection {
         items {
           title
@@ -89,12 +89,13 @@ const sitemapQuery = `
   }
 `;
 
-export const contentServer = async ({ params, preview }: IPageContext) => {
+export const contentServer = async ({ locale, params, preview }: IPageContext) => {
 
   const slug = params?.subslug ?? params?.slug ?? 'be reyt';
 
   const queryVars = {
     slug,
+    locale,
     preview
   };
 
@@ -131,9 +132,6 @@ export const contentProps = async (ctx: IPageContext) => {
     };
 
   }
-
-  // console.log(`CTX INBOUND`);
-  // console.log(ctx);
 
   return {
     props: {

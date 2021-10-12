@@ -45,6 +45,10 @@ interface IPage extends IPreview {
   data: any;
 }
 
+interface IPageChildren {
+  items: IPageParam[];
+}
+
 interface IPageContext {
   locale: string;
   locales: string[];
@@ -55,6 +59,10 @@ interface IPageContext {
 interface IPageParam {
   slug: string;
   subslug?: string;
+}
+
+interface IParentParam extends IPageParam {
+  childPagesCollection: IPageChildren;
 }
 
 interface IQuery {
